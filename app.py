@@ -14,7 +14,7 @@ app.config['UPLOAD_FOLDER'] = 'static/uploads'
 # Global variable to hold our model
 model = None
 
-# 2. Lazy-loader function: Loads the model ONLY when the first prediction is requested
+# 2. Lazy-loader function: Loads the model ONLY when needed to save RAM
 def get_model():
     global model
     if model is None:
@@ -73,5 +73,6 @@ def predict():
 
 if __name__ == '__main__':
     os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
-    # Using port 8080 as discussed
-    app.run(debug=True, port=8080)
+    # Render assigns its own port, so we use the environment variable PORT or default to 8080
+    port = int(os.environ.get("PORT", 8080))
+    app.run(debug=False, host='0.0.0.0', port=port)
